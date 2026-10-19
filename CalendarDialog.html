@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <base target="_top">
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 24px;
+      background: #f8f9fa;
+      color: #202124;
+    }
+
+    h2 {
+      margin: 0 0 5px;
+      font-size: 22px;
+    }
+
+    .subtitle {
+      color: #5f6368;
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    .section {
+      background: white;
+      border: 1px solid #dadce0;
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 15px;
+    }
+
+    .section-title {
+      font-weight: 600;
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #5f6368;
+      margin-bottom: 6px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #dadce0;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 13px;
+      background: white;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #1a73e8;
+    }
+
+    textarea {
+      height: 260px;
+      resize: vertical;
+      line-height: 1.45;
+    }
+
+    .row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .field {
+      flex: 1;
+    }
+
+    .detected {
+      background: #f1f3f4;
+      padding: 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #5f6368;
+      line-height: 1.5;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .checkbox input {
+      width: auto;
+    }
+
+    .warning {
+      background: #fff8e1;
+      border: 1px solid #f9d66b;
+      border-radius: 7px;
+      padding: 11px;
+      margin-top: 12px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    button {
+      border: none;
+      border-radius: 6px;
+      padding: 10px 17px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    .primary {
+      background: #1a73e8;
+      color: white;
+    }
+
+    .secondary {
+      background: #f1f3f4;
+      color: #202124;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 100px 20px;
+    }
+
+    .spinner {
+      width: 30px;
+      height: 30px;
+      margin: auto auto 15px;
+      border: 3px solid #dadce0;
+      border-top-color: #1a73e8;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+
+      to {
+        transform: rotate(360deg);
+      }
+
+    }
+
+    .result {
+      display: none;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      background: #f8f9fa;
+      border-radius: 7px;
+      padding: 12px;
+    }
+
+    .stat-number {
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: #5f6368;
+      margin-top: 3px;
+    }
+
+    .success {
+      background: #e6f4ea;
+      border: 1px solid #81c995;
+      padding: 14px;
+      border-radius: 7px;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .error {
+      background: #fce8e6;
+      border: 1px solid #f28b82;
+      padding: 14px;
+      border-radius: 7px;
+      font-size: 13px;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .info {
+      background: #e8f0fe;
+      border: 1px solid #aecbfa;
+      padding: 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    .event-summary {
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .sheet-name {
+      font-weight: 600;
+      color: #1a73e8;
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     MAIN FORM
+===================================================== -->
+
+<div id="main">
+
+  <h2>
+    📅 Calendar Invitation Tool
+  </h2>
+
+  <div class="subtitle">
+    Create one Google Calendar event and invite your Tally respondents.
+  </div>
+
+
+  <!-- ===================================================
+       ACTIVE SHEET
+  ==================================================== -->
+
+  <div class="section">
+
+    <div class="section-title">
+      📊 Active Tally Response Sheet
+    </div>
+
+
+    <div
+      id="sheetInfo"
+      class="info"
+    >
+
+      Detecting active sheet...
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================
+       EVENT DETAILS
+  ==================================================== -->
+
+  <div class="section">
+
+    <div class="section-title">
+      📌 Event Details
+    </div>
+
+
+    <!-- CALENDAR -->
+
+    <label>
+      Calendar
+    </label>
+
+    <select id="calendar">
+
+      <option>
+        Loading calendars...
+      </option>
+
+    </select>
+
+
+    <br><br>
+
+
+    <!-- TITLE -->
+
+    <label>
+      Event Title
+    </label>
+
+    <input
+      id="title"
+      type="text"
+    >
+
+
+    <br><br>
+
+
+    <!-- DATE -->
+
+    <div class="row">
+
+      <div class="field">
+
+        <label>
+          Date
+        </label>
+
+        <input
+          id="date"
+          type="date"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Timezone
+        </label>
+
+        <div class="detected">
+
+          🇵🇭 <strong>Asia/Manila</strong>
+
+          <br>
+
+          Philippine Time
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <br>
+
+
+    <!-- TIME -->
+
+    <div class="row">
+
+      <div class="field">
+
+        <label>
+          Start Time
+        </label>
+
+        <input
+          id="startTime"
+          type="time"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          End Time
+        </label>
+
+        <input
+          id="endTime"
+          type="time"
+        >
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================
+       DESCRIPTION
+  ==================================================== -->
+
+  <div class="section">
+
+    <div class="section-title">
+      📝 Calendar Description
+    </div>
+
+
+    <textarea
+      id="description"
+    ></textarea>
+
+  </div>
+
+
+  <!-- ===================================================
+       TEST MODE
+  ==================================================== -->
+
+  <div class="section">
+
+    <div class="checkbox">
+
+      <input
+        id="testMode"
+        type="checkbox"
+        checked
+      >
+
+      <span>
+
+        🧪 <strong>Test Mode</strong>
+
+        — do not create the event or send invitations
+
+      </span>
+
+    </div>
+
+
+    <div class="warning">
+
+      <strong>Recommended:</strong>
+
+      Keep Test Mode enabled first.
+
+      The preview will show how many valid,
+      duplicate, missing, invalid, and
+      already-invited emails were found.
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================
+       MAIN BUTTONS
+  ==================================================== -->
+
+  <div class="buttons">
+
+    <button
+      class="secondary"
+      onclick="google.script.host.close()"
+    >
+
+      Cancel
+
+    </button>
+
+
+    <button
+      id="previewButton"
+      class="primary"
+      onclick="preview()"
+    >
+
+      🔎 Preview
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     LOADING SCREEN
+===================================================== -->
+
+<div
+  id="loading"
+  class="loading"
+>
+
+  <div class="spinner"></div>
+
+  <div id="loadingText">
+    Processing...
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     PREVIEW SCREEN
+===================================================== -->
+
+<div
+  id="result"
+  class="result"
+>
+
+  <h2>
+    🔎 Invitation Preview
+  </h2>
+
+  <div class="subtitle">
+    Review everything before sending.
+  </div>
+
+
+  <!-- EVENT SUMMARY -->
+
+  <div class="section">
+
+    <div
+      id="eventSummary"
+      class="event-summary"
+    ></div>
+
+
+    <!-- STATISTICS -->
+
+    <div
+      id="stats"
+      class="stat-grid"
+    >
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="total"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          Total submissions
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="valid"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          New valid emails
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="duplicate"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          Duplicate emails
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="already"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          Already invited
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="missing"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          Missing emails
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div
+          class="stat-number"
+          id="invalid"
+        >
+          0
+        </div>
+
+        <div class="stat-label">
+          Invalid emails
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- TEST / REAL MODE MESSAGE -->
+
+    <div
+      id="modeMessage"
+      class="warning"
+    ></div>
+
+  </div>
+
+
+  <!-- ===================================================
+       PREVIEW BUTTONS
+  ==================================================== -->
+
+  <div class="buttons">
+
+    <button
+      class="secondary"
+      onclick="backToForm()"
+    >
+
+      ← Back
+
+    </button>
+
+
+    <button
+      id="actionButton"
+      class="primary"
+      onclick="performAction()"
+    >
+
+      🧪 Run Test
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+
+/**********************************************************
+ * GLOBAL SETTINGS
+ **********************************************************/
+
+let currentSettings = null;
+
+
+/**********************************************************
+ * LOAD DATA WHEN MODAL OPENS
+ **********************************************************/
+
+window.onload = function() {
+
+  google.script.run
+
+    .withSuccessHandler(
+      loadInitialData
+    )
+
+    .withFailureHandler(
+      showError
+    )
+
+    .getInitialData();
+
+};
+
+
+/**********************************************************
+ * LOAD INITIAL DATA
+ **********************************************************/
+
+function loadInitialData(data) {
+
+
+  /*
+   * Show active sheet.
+   */
+
+  document.getElementById(
+    "sheetInfo"
+  ).innerHTML =
+
+    `<strong>Active sheet:</strong>
+
+     <span class="sheet-name">
+       ${escapeHtml(data.sheetName)}
+     </span>
+
+     <br><br>
+
+     <strong>Submissions:</strong>
+     ${data.rowCount}
+
+     <br>
+
+     <strong>Email column:</strong>
+     ${escapeHtml(data.emailColumn)}
+
+     <br>
+
+     <strong>First Name:</strong>
+     ${escapeHtml(
+       data.firstNameColumn ||
+       "Not found"
+     )}
+
+     <br>
+
+     <strong>Last Name:</strong>
+     ${escapeHtml(
+       data.lastNameColumn ||
+       "Not found"
+     )}`;
+
+
+  /*
+   * Populate calendars.
+   */
+
+  const calendarSelect =
+    document.getElementById(
+      "calendar"
+    );
+
+
+  calendarSelect.innerHTML = "";
+
+
+  data.calendars.forEach(
+    function(calendar) {
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+
+      option.value =
+        calendar.id;
+
+
+      option.textContent =
+        calendar.name;
+
+
+      calendarSelect.appendChild(
+        option
+      );
+
+    }
+  );
+
+
+  /*
+   * Fill default event settings.
+   */
+
+  document.getElementById(
+    "title"
+  ).value =
+    data.defaults.title;
+
+
+  document.getElementById(
+    "date"
+  ).value =
+    data.defaults.date;
+
+
+  document.getElementById(
+    "startTime"
+  ).value =
+    data.defaults.startTime;
+
+
+  document.getElementById(
+    "endTime"
+  ).value =
+    data.defaults.endTime;
+
+
+  document.getElementById(
+    "description"
+  ).value =
+    data.defaults.description;
+
+}
+
+
+/**********************************************************
+ * GET SETTINGS FROM FORM
+ **********************************************************/
+
+function getSettings() {
+
+  return {
+
+    /*
+     * This is automatically supplied
+     * by the active sheet.
+     */
+
+    sheetName:
+      document.getElementById(
+        "sheetInfo"
+      ).dataset.sheetName,
+
+
+    calendarId:
+      document.getElementById(
+        "calendar"
+      ).value,
+
+
+    title:
+      document.getElementById(
+        "title"
+      ).value.trim(),
+
+
+    date:
+      document.getElementById(
+        "date"
+      ).value,
+
+
+    startTime:
+      document.getElementById(
+        "startTime"
+      ).value,
+
+
+    endTime:
+      document.getElementById(
+        "endTime"
+      ).value,
+
+
+    description:
+      document.getElementById(
+        "description"
+      ).value,
+
+
+    testMode:
+      document.getElementById(
+        "testMode"
+      ).checked
+
+  };
+
+}
+
+
+/**********************************************************
+ * PREVIEW
+ **********************************************************/
+
+function preview() {
+
+
+  /*
+   * We need the active sheet name.
+   */
+
+  google.script.run
+
+    .withSuccessHandler(
+      function(sheetInfo) {
+
+        currentSettings =
+          getSettings();
+
+
+        currentSettings.sheetName =
+          sheetInfo.sheetName;
+
+
+        if (
+          !currentSettings.calendarId
+        ) {
+
+          alert(
+            "Please select a calendar."
+          );
+
+          return;
+
+        }
+
+
+        if (
+          !currentSettings.title
+        ) {
+
+          alert(
+            "Please enter an event title."
+          );
+
+          return;
+
+        }
+
+
+        if (
+          !currentSettings.date
+        ) {
+
+          alert(
+            "Please select a date."
+          );
+
+          return;
+
+        }
+
+
+        showLoading(
+          "Checking Tally submissions..."
+        );
+
+
+        google.script.run
+
+          .withSuccessHandler(
+            showPreview
+          )
+
+          .withFailureHandler(
+            showError
+          )
+
+          .previewInvitations(
+            currentSettings
+          );
+
+      }
+    )
+
+    .withFailureHandler(
+      showError
+    )
+
+    .getActiveSheetInfo();
+
+}
+
+
+/**********************************************************
+ * SHOW PREVIEW
+ **********************************************************/
+
+function showPreview(data) {
+
+
+  hideLoading();
+
+
+  document.getElementById(
+    "main"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "result"
+  ).style.display =
+    "block";
+
+
+  /*
+   * Get calendar name.
+   */
+
+  const calendarSelect =
+    document.getElementById(
+      "calendar"
+    );
+
+
+  const calendarName =
+    calendarSelect
+      .selectedOptions[0]
+      .text;
+
+
+  /*
+   * Event summary.
+   */
+
+  document.getElementById(
+    "eventSummary"
+  ).innerHTML =
+
+    `<strong>
+       📅 ${escapeHtml(
+         currentSettings.title
+       )}
+     </strong>
+
+     <br><br>
+
+     <strong>Date:</strong>
+     ${formatDate(
+       currentSettings.date
+     )}
+
+     <br>
+
+     <strong>Time:</strong>
+     ${formatTime(
+       currentSettings.startTime
+     )}
+     –
+     ${formatTime(
+       currentSettings.endTime
+     )}
+
+     <br>
+
+     <strong>Calendar:</strong>
+     ${escapeHtml(
+       calendarName
+     )}
+
+     <br>
+
+     <strong>Active Sheet:</strong>
+     ${escapeHtml(
+       currentSettings.sheetName
+     )}`;
+
+
+  /*
+   * Statistics.
+   */
+
+  document.getElementById(
+    "total"
+  ).textContent =
+    data.totalSubmissions;
+
+
+  document.getElementById(
+    "valid"
+  ).textContent =
+    data.validEmails;
+
+
+  document.getElementById(
+    "duplicate"
+  ).textContent =
+    data.duplicates;
+
+
+  document.getElementById(
+    "already"
+  ).textContent =
+    data.alreadyInvited;
+
+
+  document.getElementById(
+    "missing"
+  ).textContent =
+    data.missingEmail;
+
+
+  document.getElementById(
+    "invalid"
+  ).textContent =
+    data.invalidEmail;
+
+
+  /*
+   * Configure button.
+   */
+
+  const modeMessage =
+    document.getElementById(
+      "modeMessage"
+    );
+
+
+  const actionButton =
+    document.getElementById(
+      "actionButton"
+    );
+
+
+  if (
+    currentSettings.testMode
+  ) {
+
+    modeMessage.innerHTML =
+
+      "🧪 <strong>TEST MODE IS ON.</strong><br>" +
+
+      "No calendar event will be created " +
+
+      "and no invitation emails will be sent.";
+
+
+    actionButton.textContent =
+      "🧪 Run Test";
+
+  } else {
+
+    modeMessage.innerHTML =
+
+      "⚠️ <strong>REAL INVITATIONS ARE ENABLED.</strong><br>" +
+
+      "One calendar event will be created " +
+
+      "and Google Calendar will be asked to " +
+
+      "send invitation emails to the valid respondents.";
+
+
+    actionButton.textContent =
+      "📅 Send Invitations";
+
+  }
+
+}
+
+
+/**********************************************************
+ * PERFORM TEST OR SEND
+ **********************************************************/
+
+function performAction() {
+
+
+  if (
+    !currentSettings
+  ) {
+
+    return;
+
+  }
+
+
+  /*
+   * If REAL MODE,
+   * ask for confirmation.
+   */
+
+  if (
+    currentSettings.testMode === false
+  ) {
+
+    const validCount =
+      document.getElementById(
+        "valid"
+      ).textContent;
+
+
+    const confirmed =
+      confirm(
+
+        "⚠️ SEND CALENDAR INVITATIONS?\n\n" +
+
+        "This will create ONE Google Calendar event " +
+
+        "and invite " +
+
+        validCount +
+
+        " valid respondents.\n\n" +
+
+        "Google Calendar will be asked to send " +
+
+        "invitation emails to the attendees.\n\n" +
+
+        "Continue?"
+
+      );
+
+
+    if (!confirmed) {
+
+      return;
+
+    }
+
+  }
+
+
+  /*
+   * Disable button to prevent
+   * accidental double-clicks.
+   */
+
+  document.getElementById(
+    "actionButton"
+  ).disabled =
+    true;
+
+
+  showLoading(
+
+    currentSettings.testMode
+
+      ? "Running test..."
+
+      : "Creating event and sending invitations..."
+
+  );
+
+
+  google.script.run
+
+    .withSuccessHandler(
+      showFinalResult
+    )
+
+    .withFailureHandler(
+      showError
+    )
+
+    .sendInvitations(
+      currentSettings
+    );
+
+}
+
+
+/**********************************************************
+ * SHOW FINAL RESULT
+ **********************************************************/
+
+function showFinalResult(data) {
+
+
+  hideLoading();
+
+
+  document.getElementById(
+    "result"
+  ).style.display =
+    "block";
+
+
+  /*
+   * Hide statistics.
+   */
+
+  document.getElementById(
+    "stats"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "modeMessage"
+  ).style.display =
+    "none";
+
+
+  /*
+   * Show result message.
+   */
+
+  document.getElementById(
+    "eventSummary"
+  ).innerHTML =
+
+    `<div class="success">
+
+      ${escapeHtml(
+        data.message
+      )}
+
+    </div>`;
+
+
+  /*
+   * Replace buttons.
+   */
+
+  document.querySelector(
+    "#result .buttons"
+  ).innerHTML =
+
+    `<button
+      class="primary"
+      onclick="google.script.host.close()"
+    >
+
+      Done
+
+    </button>`;
+
+}
+
+
+/**********************************************************
+ * GO BACK TO FORM
+ **********************************************************/
+
+function backToForm() {
+
+
+  document.getElementById(
+    "result"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "main"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "actionButton"
+  ).disabled =
+    false;
+
+}
+
+
+/**********************************************************
+ * SHOW LOADING
+ **********************************************************/
+
+function showLoading(text) {
+
+
+  document.getElementById(
+    "main"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "result"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "loading"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "loadingText"
+  ).textContent =
+    text;
+
+}
+
+
+/**********************************************************
+ * HIDE LOADING
+ **********************************************************/
+
+function hideLoading() {
+
+  document.getElementById(
+    "loading"
+  ).style.display =
+    "none";
+
+}
+
+
+/**********************************************************
+ * SHOW ERROR
+ **********************************************************/
+
+function showError(error) {
+
+
+  hideLoading();
+
+
+  document.getElementById(
+    "main"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "result"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "stats"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "modeMessage"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "eventSummary"
+  ).innerHTML =
+
+    `<div class="error">
+
+      ❌ <strong>Something went wrong.</strong>
+
+      <br><br>
+
+      ${escapeHtml(
+        error.message ||
+        String(error)
+      )}
+
+    </div>`;
+
+
+  document.querySelector(
+    "#result .buttons"
+  ).innerHTML =
+
+    `<button
+      class="secondary"
+      onclick="google.script.host.close()"
+    >
+
+      Close
+
+    </button>`;
+
+}
+
+
+/**********************************************************
+ * FORMAT DATE
+ **********************************************************/
+
+function formatDate(value) {
+
+
+  const date =
+    new Date(
+      value +
+      "T00:00:00"
+    );
+
+
+  return date.toLocaleDateString(
+    "en-PH",
+    {
+
+      year:
+        "numeric",
+
+      month:
+        "long",
+
+      day:
+        "numeric"
+
+    }
+  );
+
+}
+
+
+/**********************************************************
+ * FORMAT TIME
+ **********************************************************/
+
+function formatTime(value) {
+
+
+  const parts =
+    value.split(":");
+
+
+  let hour =
+    parseInt(
+      parts[0],
+      10
+    );
+
+
+  const minute =
+    parts[1];
+
+
+  const period =
+    hour >= 12
+      ? "PM"
+      : "AM";
+
+
+  if (
+    hour === 0
+  ) {
+
+    hour = 12;
+
+  }
+  else if (
+    hour > 12
+  ) {
+
+    hour -= 12;
+
+  }
+
+
+  return `${hour}:${minute} ${period}`;
+
+}
+
+
+/**********************************************************
+ * ESCAPE HTML
+ **********************************************************/
+
+function escapeHtml(value) {
+
+
+  return String(value)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+</script>
+
+</body>
+
+</html>
