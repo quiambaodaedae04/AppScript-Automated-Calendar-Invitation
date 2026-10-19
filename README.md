@@ -2,6 +2,8 @@
 
 A reusable **Google Apps Script tool** that allows START-DOST departments to send Google Calendar invitations to participants listed in a **Google Sheet**.
 
+IMPORTANT NOTE: Please add 'Services' -> 'Google Calendar API' so that it functions correctly.
+
 **What it does:**
 - Automatically detects the **active/selected sheet** containing participant data.
 - Identifies participants' **email addresses** from the spreadsheet.
